@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Libreria">
+<link rel="manifest" href="manifest.json">
 <title>La Mia Libreria</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
@@ -828,12 +829,52 @@ async function syncPull(){
 }
 function setSyncStatus(html){document.getElementById('sync-status').innerHTML=html;}
 
-// ── PWA ────────────────────────────────────────────────────
+// ── PWA MANIFEST (inline, riconosciuto da PWABuilder) ──────
+(function(){
+  // Genera icona SVG come data URL
+  const svg512 = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="#1c1917"/><rect x="60" y="80" width="180" height="352" rx="12" fill="#3d3530"/><rect x="64" y="80" width="8" height="352" rx="4" fill="#1c1917"/><rect x="272" y="80" width="180" height="352" rx="12" fill="#322b27"/><rect x="276" y="80" width="8" height="352" rx="4" fill="#1c1917"/><text x="256" y="290" font-size="120" text-anchor="middle" font-family="serif">📚</text><rect x="60" y="380" width="392" height="6" rx="3" fill="#e8a87c" opacity="0.6"/></svg>`;
+  const iconUrl = 'data:image/svg+xml;base64,' + btoa(svg512);
+
+  // Crea e inietta il manifest
+  const manifest = {
+    name: 'La Mia Libreria',
+    short_name: 'Libreria',
+    description: 'Biblioteca personale — tieni traccia dei libri letti',
+    start_url: './',
+    display: 'standalone',
+    orientation: 'portrait',
+    background_color: '#1c1917',
+    theme_color: '#1c1917',
+    lang: 'it',
+    categories: ['books', 'lifestyle', 'productivity'],
+    icons: [
+      { src: iconUrl, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
+      { src: iconUrl, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+    ],
+    screenshots: [],
+    shortcuts: [
+      { name: 'Aggiungi libro', short_name: 'Aggiungi', description: 'Aggiungi un nuovo libro', url: './#add' }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = URL.createObjectURL(blob);
+  document.head.appendChild(link);
+
+  // Apple touch icon
+  const appleIcon = document.createElement('link');
+  appleIcon.rel = 'apple-touch-icon';
+  appleIcon.href = iconUrl;
+  document.head.appendChild(appleIcon);
+})();
+
+// ── SERVICE WORKER ─────────────────────────────────────────
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('install-banner').style.display='flex';});
 document.getElementById('install-btn').onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const{outcome}=await deferredPrompt.userChoice;if(outcome==='accepted')document.getElementById('install-banner').style.display='none';};
 document.getElementById('dismiss-banner').onclick=()=>{document.getElementById('install-banner').style.display='none';};
-if('serviceWorker' in navigator){const sw=`const C='lib-v3',A=[location.href];self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(A)).then(()=>self.skipWaiting()));});self.addEventListener('activate',e=>{e.waitUntil(clients.claim());});self.addEventListener('fetch',e=>{if(/googleapis|firebaseio|fonts\.g|openlibrary|covers\.openlibrary/.test(e.request.url))return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{return caches.open(C).then(c=>{c.put(e.request,res.clone());return res;});}).catch(()=>caches.match(e.request))));});`;const blob=new Blob([sw],{type:'application/javascript'});navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});}
+if('serviceWorker' in navigator){const sw=`const C='lib-v4',A=[location.href];self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(A)).then(()=>self.skipWaiting()));});self.addEventListener('activate',e=>{e.waitUntil(clients.claim());});self.addEventListener('fetch',e=>{if(/googleapis|firebaseio|fonts\.g|openlibrary|covers\.openlibrary/.test(e.request.url))return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{return caches.open(C).then(c=>{c.put(e.request,res.clone());return res;});}).catch(()=>caches.match(e.request))));});`;const blob=new Blob([sw],{type:'application/javascript'});navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});}
 
 // ── Utils ──────────────────────────────────────────────────
 const h=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
