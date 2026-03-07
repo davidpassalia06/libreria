@@ -943,18 +943,8 @@ function renderUserScreen() {
     </div>`).join('');
   // Async update counts
   us.forEach(u => {
-    if (!db) { 
-      const el = document.getElementById('ucount-' + u.id);
-      if (el) el.textContent = '';
-      return;
-    }
-    dbAllForUser(u.id).then(bs => {
-      const el = document.getElementById('ucount-' + u.id);
-      if (el) el.textContent = bs.length + (bs.length === 1 ? ' libro' : ' libri');
-    }).catch(() => {
-      const el = document.getElementById('ucount-' + u.id);
-      if (el) el.textContent = '';
-    });
+    const el = document.getElementById('ucount-' + u.id);
+    if (el) el.textContent = '';
   });
 }
 
@@ -1441,14 +1431,13 @@ if ('serviceWorker' in navigator) {
     console.log('SW error:', err);
   });
 }
-  
+
 // ── Utils ─────────────────────────────────────────────────────
 const h = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const trunc = (s, n) => s && s.length > n ? s.slice(0, n - 1) + '…' : (s || '');
 
 // ── Init ──────────────────────────────────────────────────────
 (async () => {
-  await openDB();
   renderUserScreen();
 })();
 </script>
