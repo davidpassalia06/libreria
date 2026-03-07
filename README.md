@@ -4,8 +4,21 @@ Un'app personale per tenere traccia dei libri letti, in corso e da leggere. Funz
 
 ---
 
+## Novità — v2.0
+
+**Profili utente locali.** Puoi ora creare più profili sulla stessa installazione, ognuno con la propria libreria separata. Utile per famiglie o per tenere distinte collezioni diverse. Il cambio profilo avviene dalla schermata iniziale o dalla pillola nell'header.
+
+**Note per capitolo.** Ogni libro può avere un numero di capitoli definito dall'utente. Per ciascuno è possibile aggiungere un titolo, un riassunto o appunti — tutto consultabile dalla pagina di dettaglio e modificabile con un clic.
+
+**Backup locale (esporta/importa).** Dalla pagina Impostazioni è possibile esportare la propria libreria come file JSON e reimportarla su qualsiasi dispositivo, senza account e senza internet.
+
+---
+
 ## Funzionalità
 
+- **Profili utente** separati sulla stessa installazione
+- **Note per capitolo** — titolo, riassunto e appunti per ogni capitolo
+- **Backup locale** — esporta e importa la libreria come file JSON
 - **Scaffale visivo** con copertine, filtri per stato e ordinamento
 - **Ricerca automatica** su Open Library — recupera copertina, autore, editore, anno e trama
 - **Scheda completa** per ogni libro: copertina, autore, editore, anno, pagine, genere, ISBN, data di lettura
@@ -21,6 +34,7 @@ Un'app personale per tenere traccia dei libri letti, in corso e da leggere. Funz
 
 ```
 index.html       # App completa (singolo file)
+sw.js            # Service Worker per cache offline
 manifest.json    # Manifest PWA per installazione nativa
 icon-192.png     # Icona app 192×192
 icon-512.png     # Icona app 512×512
@@ -37,6 +51,8 @@ icon-512.png     # Icona app 512×512
 3. Su **iOS** (Safari): pulsante condividi → *Aggiungi a schermata Home*
 4. Su **Desktop** (Chrome/Edge): icona di installazione nella barra degli indirizzi
 
+> ⚠ Firefox su Android non supporta i service worker su GitHub Pages in modo affidabile. Si consiglia Chrome o Samsung Internet.
+
 ### Come APK Android
 
 1. Vai su [pwabuilder.com](https://pwabuilder.com)
@@ -50,7 +66,7 @@ icon-512.png     # Icona app 512×512
 
 ## Sincronizzazione tra dispositivi
 
-L'app usa **Firebase Realtime Database** (piano gratuito Spark) per sincronizzare i dati.
+L'app usa **Firebase Realtime Database** (piano gratuito Spark) per sincronizzare i dati. Ogni profilo utente ha il proprio spazio separato su Firebase.
 
 ### Configurazione iniziale (una volta sola)
 
@@ -58,7 +74,7 @@ L'app usa **Firebase Realtime Database** (piano gratuito Spark) per sincronizzar
 2. Crea un nuovo progetto (piano gratuito **Spark**)
 3. Vai su *Realtime Database* → *Crea database* → *Modalità test*
 4. Copia l'URL del database (es. `https://nome-progetto-default-rtdb.firebaseio.com`)
-5. Nell'app clicca ☁ → incolla l'URL → *Salva*
+5. Nell'app clicca ⚙ → incolla l'URL → *Salva*
 
 ### Regole Firebase consigliate
 
@@ -99,15 +115,6 @@ L'app funziona completamente offline dopo la prima apertura. Le uniche funzional
 
 - La ricerca di nuovi libri su Open Library
 - La sincronizzazione con Firebase
-
----
-
-## Hosting su GitHub Pages
-
-1. Crea un repository pubblico su GitHub
-2. Carica tutti i file (`index.html`, `manifest.json`, `icon-192.png`, `icon-512.png`)
-3. Vai su *Settings → Pages → Deploy from branch → main*
-4. L'app sarà disponibile su `https://TUONOME.github.io/REPOSITORY/`
 
 ---
 
