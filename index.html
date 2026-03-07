@@ -660,6 +660,7 @@ body {
         onkeydown="if(event.key==='Enter')addUser()">
       <button class="btn-primary" onclick="addUser()">Crea</button>
     </div>
+    <div style="text-align:center;margin-top:28px;font-size:11px;color:var(--text3);letter-spacing:.5px">v2.0 — Profili · Capitoli · Backup locale</div>
   </div>
 </div>
 
@@ -967,8 +968,12 @@ function deleteUser(uid) {
   if (!confirm('Eliminare il profilo e tutti i suoi libri?')) return;
   const us = getUsers().filter(u => u.id !== uid);
   saveUsers(us);
-  // Clear IDB store for this user
-  dbClearUser(uid).then(() => renderUserScreen());
+  // Cancella i libri dal DB solo se è già aperto, altrimenti non ci sono dati
+  if (db) {
+    dbClearUser(uid).then(() => renderUserScreen()).catch(() => renderUserScreen());
+  } else {
+    renderUserScreen();
+  }
 }
 
 async function selectUser(uid) {
@@ -1002,7 +1007,7 @@ function switchUser() {
 // ══════════════════════════════════════════════════════════════
 // INDEXEDDB  (single DB, stores keyed by userId+bookId)
 // ══════════════════════════════════════════════════════════════
-const DB_NAME = 'libreria-db', DB_VER = 2, STORE = 'books';
+const DB_NAME = 'libreria-db', DB_VER = 3, STORE = 'books';
 let db;
 
 function openDB() {
@@ -1010,10 +1015,10 @@ function openDB() {
     const req = indexedDB.open(DB_NAME, DB_VER);
     req.onupgradeneeded = e => {
       const d = e.target.result;
-      if (!d.objectStoreNames.contains(STORE)) {
-        const s = d.createObjectStore(STORE, { keyPath: '_pk' });
-        s.createIndex('userId', 'userId', { unique: false });
-      }
+      // Ricrea sempre lo store: gestisce migrazione da v1 (keyPath:'id') a v3 (keyPath:'_pk')
+      if (d.objectStoreNames.contains(STORE)) d.deleteObjectStore(STORE);
+      const s = d.createObjectStore(STORE, { keyPath: '_pk' });
+      s.createIndex('userId', 'userId', { unique: false });
     };
     req.onsuccess = e => { db = e.target.result; res(db); };
     req.onerror = () => rej(req.error);
@@ -1438,6 +1443,7 @@ const trunc = (s, n) => s && s.length > n ? s.slice(0, n - 1) + '…' : (s || ''
 
 // ── Init ──────────────────────────────────────────────────────
 (async () => {
+  try { await openDB(); } catch(e) { console.warn('openDB error:', e); }
   renderUserScreen();
 })();
 </script>
