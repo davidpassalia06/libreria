@@ -1,6 +1,6 @@
 # 📚 La Mia Libreria
 
-Un'app personale per tenere traccia dei libri letti, in corso e da leggere. Funziona offline, si installa come app nativa su Android e iOS, e si sincronizza tra dispositivi tramite Firebase.
+Un'app personale per tenere traccia dei libri letti, in corso e da leggere. Funziona offline, si installa come app nativa su Android e iOS (in lavorazione), e si sincronizza tra dispositivi tramite Firebase.
 
 ---
 
