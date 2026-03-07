@@ -1427,7 +1427,11 @@ window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferr
 document.getElementById('install-btn').onclick = async () => { if (!deferredPrompt) return; deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; if (outcome === 'accepted') document.getElementById('install-banner').style.display = 'none'; };
 document.getElementById('dismiss-banner').onclick = () => { document.getElementById('install-banner').style.display = 'none'; };
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    console.log('SW scope:', reg.scope);
+  }).catch(err => {
+    console.log('SW error:', err);
+  });
 }
   
 // ── Utils ─────────────────────────────────────────────────────
