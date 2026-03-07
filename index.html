@@ -943,9 +943,17 @@ function renderUserScreen() {
     </div>`).join('');
   // Async update counts
   us.forEach(u => {
+    if (!db) { 
+      const el = document.getElementById('ucount-' + u.id);
+      if (el) el.textContent = '';
+      return;
+    }
     dbAllForUser(u.id).then(bs => {
       const el = document.getElementById('ucount-' + u.id);
       if (el) el.textContent = bs.length + (bs.length === 1 ? ' libro' : ' libri');
+    }).catch(() => {
+      const el = document.getElementById('ucount-' + u.id);
+      if (el) el.textContent = '';
     });
   });
 }
