@@ -1,4 +1,4 @@
-const C = '__CACHE_VERSION__';
+const C = 'lib-20260308142149';
 const EXCLUDE = /googleapis|firebaseio|fonts\.g|openlibrary|covers\.openlibrary/;
 self.addEventListener('install', e => {
   e.waitUntil(
