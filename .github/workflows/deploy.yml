@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Aggiorna versione cache Service Worker
+        run: |
+          VERSION="lib-$(date -u +'%Y%m%d%H%M%S')"
+          sed -i "s/__CACHE_VERSION__/$VERSION/" sw.js
+          echo "Cache version: $VERSION"
+
+      - name: Commit e push sw.js aggiornato
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sw.js
+          git diff --staged --quiet || git commit -m "chore: aggiorna cache SW [skip ci]"
+          git push
