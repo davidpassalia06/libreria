@@ -1,12 +1,10 @@
-const C = 'lib-v4';
+const C = '__CACHE_VERSION__';
 const EXCLUDE = /googleapis|firebaseio|fonts\.g|openlibrary|covers\.openlibrary/;
-
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(C).then(c => c.addAll(['./', './index.html'])).then(() => self.skipWaiting())
   );
 });
-
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
@@ -14,7 +12,6 @@ self.addEventListener('activate', e => {
     ).then(() => clients.claim())
   );
 });
-
 self.addEventListener('fetch', e => {
   if (EXCLUDE.test(e.request.url)) return;
   e.respondWith(
