@@ -1,6 +1,6 @@
 {
-  "name": "La Mia Libreria",
-  "short_name": "Libreria",
+  "name": "Marginalia",
+  "short_name": "Marginalia",
   "description": "Biblioteca personale — tieni traccia dei libri letti",
   "start_url": "./index.html",
   "display": "standalone",
