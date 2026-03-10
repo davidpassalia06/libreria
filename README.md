@@ -1,64 +1,89 @@
 # 📚 Marginalia
 
-Un'app personale per tenere traccia dei libri letti, in corso e da leggere. Funziona offline, si installa come app nativa su Android e iOS(in lavorazione), e si sincronizza tra dispositivi tramite Firebase.
+> *marginalia* — dal latino. Le note scritte a margine dei libri: pensieri, dubbi, intuizioni lasciate dal lettore tra le righe. Ciò che sfugge alla parola scritta, catturato a matita sul bordo della pagina.
+
+Un'app personale per tenere traccia dei libri letti, in corso e da leggere. Funziona offline, si installa come app nativa su Android e iOS, e si sincronizza tra dispositivi tramite Firebase.
+
+---
+
+## Novità — v5.1
+
+**Copertine dalla galleria.** È ora possibile caricare una copertina direttamente dalla galleria del dispositivo. L'immagine viene ridimensionata automaticamente a 400px e salvata in locale — nessun link esterno, nessun problema di copyright.
+
+**Campo "Iniziato il".** Il form di ogni libro ora include la data di inizio lettura, affiancata alla data di fine. Il Compendium annuale calcola automaticamente la durata media di lettura in giorni.
+
+**Compendium annuale**. La schermata di riepilogo annuale è stata rinominata Compendium per evitare conflitti con marchi registrati. Mostra libri letti, pagine, media voti, sessioni Pomodoro, libro dell'anno, genere e autore preferiti, grafico mensile, citazione casuale e — con il nuovo campo "Iniziato il" — la durata media per libro.
+
+**Streak più rigorosa.** La streak giornaliera si incrementa solo completando una sessione Pomodoro o aggiornando manualmente la pagina corrente. Aprire l'app non è sufficiente.
+
+**Sezione Scopri.** Nella schermata di ricerca, quando il campo è vuoto, compare una selezione curata di classici divisi per genere (Narrativa letteraria, Narrativa italiana, Fantascienza, Filosofia, Giallo e noir, Saggistica). Toccare un libro precompila il form automaticamente.
+
+**Sicurezza XSS.** Tutti i contenuti dinamici passano ora per la funzione di escape `h()`. Gli handler `onclick` inline sono stati rimossi in favore di `addEventListener`.
+
+**Validazione importazione JSON.** I file importati vengono ora validati campo per campo con lunghezze massime e whitelist per lo stato.
+
+---
+
+## Novità — v5.0
+
+**Nuovo stile della selezione profili.** La schermata iniziale mostra i profili come tile con avatar emoji, nome e streak. La modalità gestione permette di aggiungere, modificare ed eliminare profili senza uscire dalla schermata.
 
 ---
 
 ## Novità — v4.0
 
-**Icone per i profili.** Al momento della creazione di un profilo è possibile scegliere un'icona tra 16 emoji disponibili. L'icona si può cambiare in qualsiasi momento dalla pagina del profilo, cliccando sull'avatar.
+**Icone per i profili.** Al momento della creazione di un profilo è possibile scegliere un'icona tra 14 emoji disponibili. L'icona si può cambiare in qualsiasi momento dalla pagina del profilo.
 
-**Pagina profilo utente.** Cliccando sul proprio nome nell'header si apre una pagina dedicata con statistiche personali (libri totali, completati, pagine lette, media voti, sessioni Pomodoro, streak), i 4 libri più amati in evidenza, e la griglia completa dei distintivi. Il pulsante per cambiare utente si trova in fondo a questa pagina.
+**Pagina profilo utente.** Statistiche personali, libri preferiti e griglia completa dei distintivi in un unico posto.
 
-**Condivisione scheda libro.** Nella pagina di dettaglio di ogni libro compare il pulsante "↗ Condividi". Genera una scheda grafica con copertina, titolo, autore, valutazione, stato e un estratto della recensione, esportabile come PNG o PDF a scelta.
+**Condivisione scheda libro.** Genera una scheda grafica con copertina, titolo, autore, valutazione, stato e recensione, esportabile come PNG o PDF.
 
-**Avviso modifiche non salvate.** Se si inizia a compilare il form di un libro e si tenta di uscire senza salvare, compare un dialogo con tre opzioni: salvare, scartare le modifiche, o tornare indietro.
+**Avviso modifiche non salvate.** Dialogo di conferma prima di abbandonare il form con modifiche in corso.
 
-**Verifica distintivi all'avvio.** I badge vengono ora controllati ad ogni accesso al profilo, e non solo al salvataggio manuale. Questo garantisce che i distintivi vengano assegnati correttamente anche dopo un'importazione da file o un download da Firebase.
+**Verifica distintivi all'avvio.** I badge vengono controllati ad ogni accesso al profilo.
 
 ---
 
 ## Novità — v3.0
 
-**Sessione di lettura con timer Pomodoro.** Ogni libro ha una sezione dedicata alla sessione di lettura. La pagina corrente è modificabile direttamente dalla scheda e viene mostrata come barra di avanzamento nella griglia. Il pulsante 🍅 apre una schermata fullscreen con timer configurabile, anello animato e aggiornamento automatico del progresso al termine di ogni sessione.
+**Timer Pomodoro.** Sessioni configurabili con anello animato e aggiornamento automatico del progresso al termine.
 
-**Streak giornaliera.** L'app traccia i giorni consecutivi di utilizzo. La fiamma 🔥 appare nell'header e nella schermata di selezione utente. Si azzera se si salta un giorno.
+**Streak giornaliera.** Giorni consecutivi di lettura tracciati automaticamente.
 
-**Distintivi (Achievements).** Dodici badge sbloccabili in base all'attività di lettura. Al momento dello sblocco compare una notifica animata.
+**Distintivi.** 12 badge sbloccabili in base all'attività di lettura.
 
 ---
 
 ## Novità — v2.0
 
-**Profili utente locali.** Più profili sulla stessa installazione, ognuno con la propria libreria separata.
+**Profili utente locali.** Più profili sulla stessa installazione con librerie separate.
 
-**Note per capitolo.** Titolo, riassunto e appunti per ogni capitolo del libro, modificabili dalla scheda dettaglio.
+**Note per capitolo.** Appunti per ogni capitolo, modificabili dalla scheda dettaglio.
 
-**Backup locale.** Esporta e importa la libreria come file JSON dalla pagina Impostazioni.
+**Backup locale.** Esporta e importa come file JSON.
 
 ---
 
-## Funzionalità
+## Funzionalità complete
 
-- **Icone profilo** — scelta tra 16 emoji, modificabile in qualsiasi momento
-- **Pagina profilo** — statistiche personali, libri preferiti e distintivi in un unico posto
-- **Condivisione scheda libro** — esporta come PNG o PDF
-- **Avviso modifiche non salvate** — nessuna perdita accidentale di dati
-- **Timer Pomodoro** — sessioni configurabili con aggiornamento automatico del progresso
-- **Barra di avanzamento lettura** — pagina corrente su totale, visibile in griglia e in scheda
-- **Streak giornaliera** — giorni consecutivi tracciati automaticamente
-- **Distintivi** — 12 badge sbloccabili, verificati ad ogni accesso
-- **Profili utente** separati sulla stessa installazione
-- **Note per capitolo** — appunti per ogni capitolo del libro
-- **Backup locale** — esporta e importa come file JSON
 - **Scaffale visivo** con copertine, filtri per stato e ordinamento
-- **Ricerca automatica** su Open Library — copertina, autore, editore, anno e trama
-- **Scheda completa** per ogni libro con tutti i metadati
-- **Recensione personale**, citazione preferita e valutazione a stelle (1–5)
-- **Stato di lettura**: Letto, In corso, Da leggere, Abbandonato
-- **Statistiche** in tempo reale: totale libri, media voti, pagine totali
-- **Funzionamento offline** completo grazie a Service Worker e IndexedDB
-- **Sincronizzazione** tra dispositivi tramite Firebase Realtime Database
+- **Ricerca libri** su Open Library — copertina, autore, editore, anno, trama
+- **Sezione Scopri** — 48 classici curati divisi per genere, precompilano il form al tocco
+- **Copertine dalla galleria** — carica dal dispositivo, ridimensionate automaticamente
+- **Scheda completa** per ogni libro — tutti i metadati, recensione, citazione, trama
+- **Date di inizio e fine lettura** — con calcolo automatico della durata nel Compendium
+- **Timer Pomodoro** — sessioni configurabili con pausa, aggiornamento pagina automatico
+- **Barra di avanzamento** — pagina corrente su totale, visibile in griglia e in scheda
+- **Streak giornaliera** — si incrementa solo con sessioni Pomodoro o aggiornamento pagina
+- **Compendium annuale** — riepilogo statistiche, libro dell'anno, grafico mensile, export PNG
+- **Profili utente** separati con icone emoji personalizzabili
+- **Pagina profilo** — statistiche, libri preferiti, distintivi
+- **Condivisione scheda libro** — esporta come PNG o PDF
+- **12 distintivi** sbloccabili, verificati ad ogni accesso
+- **Backup locale** — esporta e importa come file JSON
+- **Sincronizzazione Firebase** — tra dispositivi tramite Realtime Database
+- **Funzionamento offline** completo — Service Worker e IndexedDB
+- **Sicurezza XSS** — escape di tutti i contenuti dinamici
 
 ---
 
@@ -84,11 +109,13 @@ Un'app personale per tenere traccia dei libri letti, in corso e da leggere. Funz
 ## Struttura del repository
 
 ```
-index.html       # App completa (singolo file)
-sw.js            # Service Worker per cache offline
-manifest.json    # Manifest PWA per installazione nativa
-icon-192.png     # Icona app 192×192
-icon-512.png     # Icona app 512×512
+index.html        # Struttura HTML
+js/script.js      # Logica applicazione
+css/master.css    # Stili
+sw.js             # Service Worker per cache offline
+manifest.json     # Manifest PWA per installazione nativa
+icon-192.png      # Icona app 192×192
+icon-512.png      # Icona app 512×512
 ```
 
 ---
@@ -117,9 +144,9 @@ icon-512.png     # Icona app 512×512
 
 ## Sincronizzazione tra dispositivi
 
-L'app usa **Firebase Realtime Database** (piano gratuito Spark) per sincronizzare i dati. Ogni profilo utente ha il proprio spazio separato su Firebase.
+L'app usa **Firebase Realtime Database** (piano gratuito Spark) per sincronizzare i dati. Ogni profilo ha il proprio spazio separato.
 
-### Configurazione iniziale (una volta sola)
+### Configurazione iniziale
 
 1. Vai su [console.firebase.google.com](https://console.firebase.google.com)
 2. Crea un nuovo progetto (piano gratuito **Spark**)
@@ -140,10 +167,10 @@ L'app usa **Firebase Realtime Database** (piano gratuito Spark) per sincronizzar
 
 ### Utilizzo
 
-- **⬆ Carica** — invia i dati locali su Firebase (esegui sul dispositivo A)
-- **⬇ Scarica** — recupera i dati da Firebase (esegui sul dispositivo B)
+- **⬆ Carica** — invia i dati locali su Firebase
+- **⬇ Scarica** — recupera i dati da Firebase
 
-> I dati locali vengono sempre salvati automaticamente tramite IndexedDB. Firebase è necessario solo per la sincronizzazione tra dispositivi.
+> Le copertine caricate dalla galleria vengono salvate in base64 e sincronizzate insieme ai dati del libro. I backup JSON le includono automaticamente.
 
 ---
 
@@ -151,30 +178,19 @@ L'app usa **Firebase Realtime Database** (piano gratuito Spark) per sincronizzar
 
 | Tecnologia | Utilizzo |
 |---|---|
-| HTML/CSS/JS | App completa in un singolo file, nessuna dipendenza |
-| IndexedDB | Persistenza locale dei dati, funziona offline |
+| HTML / CSS / JS | App su tre file, nessuna dipendenza di build |
+| IndexedDB | Persistenza locale, funziona offline |
 | Service Worker | Cache offline e installazione PWA |
 | Open Library API | Ricerca libri e recupero copertine |
 | Firebase Realtime Database | Sincronizzazione cloud gratuita |
-| html2canvas + jsPDF | Generazione schede PNG e PDF |
+| html2canvas + jsPDF | Generazione schede PNG e PDF e export Compendium |
 | Lora + DM Sans | Tipografia (Google Fonts) |
 
 ---
 
 ## Utilizzo offline
 
-L'app funziona completamente offline dopo la prima apertura. Le uniche funzionalità che richiedono connessione internet sono la ricerca di nuovi libri su Open Library, la sincronizzazione con Firebase, e la generazione di schede da condividere (per il caricamento delle librerie CDN).
-
----
-
-## Hosting su GitHub Pages
-
-1. Crea un repository pubblico su GitHub
-2. Carica tutti i file (`index.html`, `sw.js`, `manifest.json`, `icon-192.png`, `icon-512.png`)
-3. Vai su *Settings → Pages → Deploy from branch → main*
-4. L'app sarà disponibile su `https://TUONOME.github.io/REPOSITORY/`
-
-> Dopo ogni aggiornamento significativo, incrementa la versione della cache in `sw.js` (es. `lib-v6` → `lib-v7`) per forzare l'aggiornamento sui client già installati.
+L'app funziona completamente offline dopo la prima apertura. Richiedono connessione internet: la ricerca libri su Open Library, la sincronizzazione Firebase, e il caricamento delle librerie CDN (html2canvas, jsPDF).
 
 ---
 
