@@ -143,8 +143,7 @@ function renderUserScreen(){
   const grid=document.getElementById('profile-grid');
   let html='';
   us.forEach(u=>{
-    const st=getUserStats(u.id);
-    const streak=st.streak||0;
+    const streak=getValidStreak(u.id);
     const icon=u.icon||'📚';
     html+=`<div class="profile-tile${manageMode?' edit-mode':''}" data-uid="${h(u.id)}">
       <div class="profile-tile-avatar">${icon}</div>
@@ -556,6 +555,15 @@ function incrementStreakOnAction(){
   stats.lastActiveDay=today;
   saveUserStats(currentUser.id,stats);
   updateStreakDisplay();
+}
+function getValidStreak(uid){
+  const stats=getUserStats(uid);
+  if(!stats.lastActiveDay)return 0;
+  const today=todayStr();
+  const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+  const yStr=yesterday.toISOString().slice(0,10);
+  if(stats.lastActiveDay!==today&&stats.lastActiveDay!==yStr)return 0;
+  return stats.streak||0;
 }
 function updateStreakDisplay(){
   if(!currentUser)return;
