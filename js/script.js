@@ -272,6 +272,7 @@ async function selectUser(uid){
     document.getElementById('fb-saved').textContent='✓ URL configurato: '+firebaseUrl;
   }
   updateStreakDisplay();
+  checkStreakExpiry();
   checkAndAwardAchievements();
   renderShelf();
 }
@@ -560,6 +561,19 @@ function updateStreakDisplay(){
   if(!currentUser)return;
   const streak=getUserStats(currentUser.id).streak||0;
   document.getElementById('streak-display').textContent=streak>0?`🔥 ${streak}`:'';
+}
+function checkStreakExpiry(){
+  if(!currentUser)return;
+  const stats=getUserStats(currentUser.id);
+  if(!stats.lastActiveDay)return;
+  const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+  const yStr=yesterday.toISOString().slice(0,10);
+  const today=todayStr();
+  if(stats.lastActiveDay!==today&&stats.lastActiveDay!==yStr){
+    stats.streak=0;
+    saveUserStats(currentUser.id,stats);
+  }
+  updateStreakDisplay();
 }
 
 // ══════════════════════════════════════════════════════════════
