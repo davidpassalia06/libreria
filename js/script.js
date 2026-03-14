@@ -881,7 +881,7 @@ function recordPomodoroSession(){
   if(!currentUser)return;
   const stats=getUserStats(currentUser.id);
   stats.pomodoros=(stats.pomodoros||0)+1;
-  incrementStreakOnAction()
+  incrementStreakOnAction();
   if(new Date().getHours()>=22)stats.lateSession=true;
   saveUserStats(currentUser.id,stats);
   checkAndAwardAchievements();
