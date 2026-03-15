@@ -542,13 +542,17 @@ function debounceSearchBooks(){
 // ══════════════════════════════════════════════════════════════
 // STREAK
 // ══════════════════════════════════════════════════════════════
-function todayStr(){return new Date().toISOString().slice(0,10);}
+function todayStr(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
 function updateStreakOnLogin(){}
 function incrementStreakOnAction(){
-  if(!currentUser)return;
+  if(!currentUser){console.log('no currentUser');return;}
   const stats=getUserStats(currentUser.id);
   const today=todayStr();
-  if(stats.lastActiveDay===today)return; // già incrementata oggi
+  console.log('lastActiveDay:', stats.lastActiveDay, 'today:', today);
+  if(stats.lastActiveDay===today){console.log('già incrementata');return;}
   const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
   const yStr=yesterday.toISOString().slice(0,10);
   stats.streak=stats.lastActiveDay===yStr?(stats.streak||0)+1:1;
@@ -879,9 +883,9 @@ function updatePomoDisplay(){const m=String(Math.floor(pomoSecs/60)).padStart(2,
 function updatePomoRing(){const offset=CIRCUM*(1-(pomoTotalSecs>0?pomoSecs/pomoTotalSecs:1));document.getElementById('pomo-ring').style.strokeDashoffset=offset;}
 function recordPomodoroSession(){
   if(!currentUser)return;
+  incrementStreakOnAction();
   const stats=getUserStats(currentUser.id);
   stats.pomodoros=(stats.pomodoros||0)+1;
-  incrementStreakOnAction();
   if(new Date().getHours()>=22)stats.lateSession=true;
   saveUserStats(currentUser.id,stats);
   checkAndAwardAchievements();
